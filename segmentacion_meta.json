@@ -1,0 +1,47 @@
+{
+  "k": 4,
+  "silueta": {
+    "2": 0.3436,
+    "3": 0.377,
+    "4": 0.4139,
+    "5": 0.3936,
+    "6": 0.3548,
+    "7": 0.311
+  },
+  "varianza_pca": [
+    0.3633,
+    0.2957
+  ],
+  "variables": [
+    "log_viajes_dia",
+    "dist_mediana",
+    "tarifa_mediana",
+    "propina_mediana",
+    "pct_fin_semana",
+    "pct_6_10",
+    "pct_16_20",
+    "pct_22_5"
+  ],
+  "grupos": [
+    {
+      "nombre": "Manhattan Central",
+      "descripcion": "Se distingue por mucha demanda y más viajes de 16 a 20 h. En promedio, 1,687 viajes al día por zona, distancia mediana de 1.9 mi, propina mediana de $2.74 y 13% de los viajes entre las 22 y las 5 h.",
+      "n_zonas": 44
+    },
+    {
+      "nombre": "Barrios periféricos",
+      "descripcion": "Se distingue por poca demanda y más viajes de 6 a 10 h. En promedio, 48 viajes al día por zona, distancia mediana de 4.2 mi, propina mediana de $0.30 y 15% de los viajes entre las 22 y las 5 h.",
+      "n_zonas": 30
+    },
+    {
+      "nombre": "Vida nocturna",
+      "descripcion": "Se distingue por más viajes de noche y más viajes en fin de semana. En promedio, 674 viajes al día por zona, distancia mediana de 2.6 mi, propina mediana de $1.81 y 48% de los viajes entre las 22 y las 5 h.",
+      "n_zonas": 12
+    },
+    {
+      "nombre": "Aeropuertos/viajes largos",
+      "descripcion": "Se distingue por propinas altas y viajes largos. En promedio, 1,926 viajes al día por zona, distancia mediana de 12.6 mi, propina mediana de $8.76 y 16% de los viajes entre las 22 y las 5 h.",
+      "n_zonas": 4
+    }
+  ]
+}
