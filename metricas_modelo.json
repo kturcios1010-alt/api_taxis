@@ -1,0 +1,195 @@
+{
+  "modelo": {
+    "tipo": "XGBoost con regresión por cuantiles",
+    "cuantiles": [
+      "p10",
+      "p20",
+      "p30",
+      "p40",
+      "p50",
+      "p60",
+      "p70",
+      "p80",
+      "p90"
+    ],
+    "n_arboles": 250,
+    "profundidad": 5,
+    "tasa_aprendizaje": 0.05,
+    "variables": [
+      "zona",
+      "hora_dia",
+      "dia_semana",
+      "feriado",
+      "lag_24",
+      "lag_48",
+      "lag_167",
+      "lag_168",
+      "lag_169",
+      "media_dia_ant"
+    ]
+  },
+  "datos": {
+    "fuente": "NYC TLC, taxis amarillos, enero de 2024",
+    "entrenamiento_desde": "2024-01-08",
+    "entrenamiento_hasta": "2024-01-24",
+    "dias_entrenamiento_efectivo": 17,
+    "filas_entrenamiento": 23606,
+    "validacion_desde": "2024-01-18",
+    "prueba_desde": "2024-01-25",
+    "prueba_hasta": "2024-01-31",
+    "filas_prueba": 9744
+  },
+  "zonas": {
+    "pronosticadas": 58,
+    "umbral_pronostico": 3000,
+    "pronosticadas_en_manhattan": 55,
+    "segmentadas": 90,
+    "grupos": 4,
+    "segmentadas_sin_pronostico": 32,
+    "pct_viajes_segmentadas_sin_pronostico": 1.0860785122946626,
+    "ciudad": 263
+  },
+  "evaluacion": {
+    "mae_modelo": 11.990000484012239,
+    "mae_igual_que_hace_una_semana": 11.881773399014778,
+    "mae_igual_que_ayer": 21.286330049261085,
+    "mejora_vs_semana_pct": 0.91086642846121,
+    "mejora_vs_ayer_pct": -43.67276812740931,
+    "cobertura_80": 0.9006568144499179,
+    "cobertura_zona_min": 0.8095238095238095,
+    "cobertura_zona_max": 0.9642857142857143,
+    "calibracion": [
+      {
+        "cuantil": "p10",
+        "objetivo": 0.1,
+        "observado": 0.094
+      },
+      {
+        "cuantil": "p20",
+        "objetivo": 0.2,
+        "observado": 0.194
+      },
+      {
+        "cuantil": "p30",
+        "objetivo": 0.3,
+        "observado": 0.297
+      },
+      {
+        "cuantil": "p40",
+        "objetivo": 0.4,
+        "observado": 0.402
+      },
+      {
+        "cuantil": "p50",
+        "objetivo": 0.5,
+        "observado": 0.509
+      },
+      {
+        "cuantil": "p60",
+        "objetivo": 0.6,
+        "observado": 0.621
+      },
+      {
+        "cuantil": "p70",
+        "objetivo": 0.7,
+        "observado": 0.737
+      },
+      {
+        "cuantil": "p80",
+        "objetivo": 0.8,
+        "observado": 0.86
+      },
+      {
+        "cuantil": "p90",
+        "objetivo": 0.9,
+        "observado": 0.962
+      }
+    ]
+  },
+  "tipo_zona": [
+    {
+      "grupo": "Aeropuertos y viajes largos",
+      "zonas": 3,
+      "horas": 504,
+      "demanda_media": 100.99603174603175,
+      "mae_modelo": 19.0530007147925,
+      "mae_semana": 20.055555555555557,
+      "cobertura_80": 0.8670634920634921,
+      "error_relativo_pct": 18.865098346342815
+    },
+    {
+      "grupo": "Centro de alta demanda",
+      "zonas": 43,
+      "horas": 7224,
+      "demanda_media": 78.83361018826135,
+      "mae_modelo": 12.698096444508899,
+      "mae_semana": 12.66140642303433,
+      "cobertura_80": 0.8995016611295681,
+      "error_relativo_pct": 16.107465349087484
+    },
+    {
+      "grupo": "Vida nocturna",
+      "zonas": 8,
+      "horas": 1344,
+      "demanda_media": 48.470982142857146,
+      "mae_modelo": 10.275858821225397,
+      "mae_semana": 9.041666666666666,
+      "cobertura_80": 0.9025297619047619,
+      "error_relativo_pct": 21.200021883071507
+    },
+    {
+      "grupo": "Barrios periféricos",
+      "zonas": 4,
+      "horas": 672,
+      "demanda_media": 6.690476190476191,
+      "mae_modelo": 2.509002061161612,
+      "mae_semana": 3.050595238095238,
+      "cobertura_80": 0.9345238095238095,
+      "error_relativo_pct": 37.50109842305612
+    }
+  ],
+  "errores_por_dia": [
+    {
+      "fecha": "2024-01-25",
+      "mae_modelo": 10.51,
+      "mae_semana": 11.52,
+      "cobertura_80": 0.92
+    },
+    {
+      "fecha": "2024-01-26",
+      "mae_modelo": 10.97,
+      "mae_semana": 12.59,
+      "cobertura_80": 0.93
+    },
+    {
+      "fecha": "2024-01-27",
+      "mae_modelo": 15.16,
+      "mae_semana": 15.4,
+      "cobertura_80": 0.86
+    },
+    {
+      "fecha": "2024-01-28",
+      "mae_modelo": 14.48,
+      "mae_semana": 13.56,
+      "cobertura_80": 0.87
+    },
+    {
+      "fecha": "2024-01-29",
+      "mae_modelo": 12.97,
+      "mae_semana": 8.77,
+      "cobertura_80": 0.9
+    },
+    {
+      "fecha": "2024-01-30",
+      "mae_modelo": 10.37,
+      "mae_semana": 10.8,
+      "cobertura_80": 0.91
+    },
+    {
+      "fecha": "2024-01-31",
+      "mae_modelo": 9.47,
+      "mae_semana": 10.53,
+      "cobertura_80": 0.92
+    }
+  ]
+}
