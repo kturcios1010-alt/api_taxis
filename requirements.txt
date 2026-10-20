@@ -1,6 +1,4 @@
-fastapi
-uvicorn
-xgboost==3.4.1
+streamlit>=1.50
 pandas
-pyarrow
-numpy
+plotly
+requests

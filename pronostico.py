@@ -106,10 +106,10 @@ except requests.HTTPError as error:
     if error.response is not None and error.response.status_code == 404:
         st.warning("No hay pronóstico para esa zona y fecha.", icon=":material/search_off:")
     else:
-        st.error("La API respondió con un error. Intenta de nuevo en un momento.", icon=":material/error:")
+        st.error("La API respondió con un error. Debe intentarse de nuevo en un momento.", icon=":material/error:")
     st.stop()
 except requests.RequestException:
-    st.error("Se perdió la conexión con la API. Recarga la página.", icon=":material/cloud_off:")
+    st.error("Se perdió la conexión con la API. Conviene recargar la página.", icon=":material/cloud_off:")
     st.stop()
 
 tabla = pd.DataFrame(

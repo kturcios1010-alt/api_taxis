@@ -22,8 +22,8 @@ st.caption(
 
 if not CSV.exists() or not META.exists():
     st.info(
-        "Faltan los archivos de la segmentación. Genéralos con el cuaderno (celda 5) y copia "
-        "`zonas_segmentadas.csv` y `segmentacion_meta.json` en la carpeta `app/data/`.",
+        "Faltan los archivos de la segmentación: `zonas_segmentadas.csv` y `segmentacion_meta.json`. "
+        "Se generan con el cuaderno (celda 5) y se copian en la carpeta `data/` junto a `streamlit_app.py`.",
         icon=":material/folder_off:",
     )
     st.stop()
@@ -47,7 +47,7 @@ badge_de = {g: COLORES_BADGE[i % len(COLORES_BADGE)] for i, g in enumerate(grupo
 # ------------------------------------------------------------------ filtro por grupos
 elegidos = st.pills("Grupos", grupos, selection_mode="multi", default=grupos)
 if not elegidos:
-    st.warning("Elige al menos un grupo para ver las zonas.", icon=":material/filter_alt:")
+    st.warning("Hay que elegir al menos un grupo para ver las zonas.", icon=":material/filter_alt:")
     st.stop()
 visibles = zonas[zonas["grupo"].isin(elegidos)].copy()
 
@@ -105,7 +105,7 @@ with col_mapa:
         key="mapa_zonas",
     )
     st.caption(
-        ":material/touch_app: Selecciona zonas en el gráfico (clic, caja o lazo) para compararlas. "
+        ":material/touch_app: Se pueden seleccionar zonas en el gráfico (clic, caja o lazo) para compararlas. "
         f"Los dos ejes conservan {v1 + v2:.0%} de la variación de las zonas."
     )
 
@@ -148,7 +148,7 @@ with col_perfil:
     if len(seleccion) > 8:
         st.caption(f"Se muestran las 8 zonas con más viajes de las {len(seleccion)} seleccionadas.")
     elif not len(seleccion):
-        st.caption("Prueba: selecciona zonas de vida nocturna y compáralas con las del centro. ¿A qué hora llega cada pico?")
+        st.caption("Ejemplo: al seleccionar zonas de vida nocturna y compararlas con las del centro, se ve a qué hora llega cada pico.")
 
 # ------------------------------------------------------------------ detalle por zona
 st.subheader("Detalle por zona")

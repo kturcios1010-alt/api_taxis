@@ -42,7 +42,7 @@ def cargar_dia(zona_id: int, fecha: str) -> pd.DataFrame:
 # ------------------------------------------------------------------ encabezado
 st.title("¿Cuántos taxis enviar?")
 st.caption(
-    "Tú pones cuánto cuesta cada error. La app calcula cuántos taxis conviene mandar cada hora "
+    "Se fija cuánto cuesta cada error y la app calcula cuántos taxis conviene mandar cada hora "
     "y cuánto habrías gastado con otras estrategias."
 )
 
@@ -88,10 +88,10 @@ except requests.HTTPError as error:
     if error.response is not None and error.response.status_code == 404:
         st.warning("No hay pronóstico para esa zona y fecha.", icon=":material/search_off:")
     else:
-        st.error("La API respondió con un error. Intenta de nuevo en un momento.", icon=":material/error:")
+        st.error("La API respondió con un error. Debe intentarse de nuevo en un momento.", icon=":material/error:")
     st.stop()
 except requests.RequestException:
-    st.error("Se perdió la conexión con la API. Recarga la página.", icon=":material/cloud_off:")
+    st.error("Se perdió la conexión con la API. Conviene recargar la página.", icon=":material/cloud_off:")
     st.stop()
 
 hay_real = tabla["real"].notna().all()
@@ -106,11 +106,11 @@ def decision():
     c1, c2 = st.columns(2)
     c_ocioso = c1.slider(
         "Un taxi una hora sin pasajero (US$)", 1, 100, 10, key="c_ocioso",
-        help="Lo que se pierde por cada taxi que enviaste y se quedó esperando.",
+        help="Lo que se pierde por cada taxi enviado que se quedó esperando.",
     )
     c_perdido = c2.slider(
         "Un pasajero que no encuentra taxi (US$)", 1, 200, 40, key="c_perdido",
-        help="Lo que se pierde por cada viaje que no pudiste atender.",
+        help="Lo que se pierde por cada viaje que no se pudo atender.",
     )
 
     q = cuantil_optimo(c_perdido, c_ocioso)
@@ -144,7 +144,7 @@ def decision():
     )
 
     m1, m2, m3 = st.columns(3)
-    m1.metric("Cuantil óptimo", f"{q:.0%}", border=True, help="Qué tan seguro quieres estar de cubrir la demanda de cada hora.")
+    m1.metric("Cuantil óptimo", f"{q:.0%}", border=True, help="Qué tan seguro se quiere estar de cubrir la demanda de cada hora.")
     m2.metric(
         "Taxis a enviar en el día",
         f"{recomendado.sum():,}",
@@ -198,20 +198,20 @@ def decision():
     if not hay_real:
         st.info(
             "El 1 de febrero es \"mañana\": todavía no hay viajes reales para calcular costos. "
-            "Elige un día de enero para comparar.",
+            "Para comparar hay que elegir un día de enero.",
             icon=":material/schedule:",
         )
         return
     if fecha < PRIMER_DIA_PRUEBA:
         st.warning(
             "Este día se usó para entrenar el modelo, así que ya \"conocía\" la respuesta y la comparación sale demasiado buena. "
-            f"Para una comparación honesta elige del {PRIMER_DIA_PRUEBA[-2:]} al 31 de enero.",
+            f"Para una comparación honesta conviene elegir del {PRIMER_DIA_PRUEBA[-2:]} al 31 de enero.",
             icon=":material/school:",
         )
 
     real = tabla["real"].to_numpy()
     estrategias = {
-        f"Tu recomendación (cuantil {q_usado:.0%})": recomendado,
+        f"Recomendación (cuantil {q_usado:.0%})": recomendado,
         "Pronóstico central (p50)": p50,
         "Igual que hace una semana": semana,
     }
@@ -229,23 +229,19 @@ def decision():
         })
     comp = pd.DataFrame(filas)
     mejor = comp["Costo total"].min()
-    propio = comp.loc[0, "Costo total"]
-    vs_p50 = propio - comp.loc[1, "Costo total"]
-    vs_sem = propio - comp.loc[2, "Costo total"]
+    costos_total = comp["Costo total"].tolist()
+    propio = costos_total[0]
 
-    def con_signo(x):
-        return f"-{dinero(abs(x))}" if x < 0 else dinero(x)
+    def cambio(otro):
+        """Cuánto más (o menos) cuesta la otra regla frente a la recomendación, en %."""
+        return f"{(otro / propio - 1) * 100:+.0f}% vs. la recomendación" if propio > 0 else None
 
     k1, k2, k3 = st.columns(3)
-    k1.metric("Costo con tu recomendación", dinero(propio), border=True)
-    k2.metric(
-        "Ahorro frente al pronóstico central", con_signo(-vs_p50), border=True,
-        help="Costo del pronóstico central menos el de tu recomendación. Negativo: ese día el pronóstico central salió más barato.",
-    )
-    k3.metric(
-        "Ahorro frente a hace una semana", con_signo(-vs_sem), border=True,
-        help="Costo de \"igual que hace una semana\" menos el de tu recomendación. Negativo: ese día salió más barato repetir la semana pasada.",
-    )
+    k1.metric(f"Recomendación (p{q_usado * 100:.0f})", dinero(propio), border=True)
+    k2.metric("Enviar el pronóstico central (p50)", dinero(costos_total[1]), delta=cambio(costos_total[1]),
+              delta_color="inverse", border=True, help="Rojo: cuesta más que la recomendación. Verde: cuesta menos.")
+    k3.metric("Enviar lo de hace una semana", dinero(costos_total[2]), delta=cambio(costos_total[2]),
+              delta_color="inverse", border=True, help="Rojo: cuesta más que la recomendación. Verde: cuesta menos.")
 
     fig_c = go.Figure()
     fig_c.add_trace(go.Bar(y=comp["Estrategia"], x=comp["Costo de taxis ociosos"], name="Taxis ociosos", orientation="h", marker_color=COLOR_OCIOSO))
@@ -268,7 +264,7 @@ def decision():
     )
     if mejor < propio - 0.5:
         st.caption(
-            ":material/info: Un solo día puede salir mal por azar: si otra estrategia gana hoy, mira la semana completa. "
+            ":material/info: Un solo día puede salir mal por azar: si otra estrategia gana hoy, conviene mirar la semana completa. "
             "El cuantil óptimo es el mejor **en promedio**, no cada día."
         )
 
@@ -279,11 +275,11 @@ def decision():
             try:
                 dia = cargar_dia(zona_id, f)
             except requests.RequestException:
-                st.error("No se pudo consultar uno de los días. Recarga la página.")
+                st.error("No se pudo consultar uno de los días. Conviene recargar la página.")
                 break
             r = dia["real"].to_numpy()
             plan_dia = {
-                f"Tu recomendación (cuantil {q_usado:.0%})": taxis_para_cuantil(dia, q_usado),
+                f"Recomendación (cuantil {q_usado:.0%})": taxis_para_cuantil(dia, q_usado),
                 "Pronóstico central (p50)": taxis_para_cuantil(dia, 0.5),
                 "Igual que hace una semana": dia["hace_una_semana"].to_numpy(),
             }

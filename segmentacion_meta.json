@@ -24,7 +24,7 @@
   ],
   "grupos": [
     {
-      "nombre": "Manhattan Central",
+      "nombre": "Centro de alta demanda",
       "descripcion": "Se distingue por mucha demanda y más viajes de 16 a 20 h. En promedio, 1,687 viajes al día por zona, distancia mediana de 1.9 mi, propina mediana de $2.74 y 13% de los viajes entre las 22 y las 5 h.",
       "n_zonas": 44
     },
@@ -39,7 +39,7 @@
       "n_zonas": 12
     },
     {
-      "nombre": "Aeropuertos/viajes largos",
+      "nombre": "Aeropuertos y viajes largos",
       "descripcion": "Se distingue por propinas altas y viajes largos. En promedio, 1,926 viajes al día por zona, distancia mediana de 12.6 mi, propina mediana de $8.76 y 16% de los viajes entre las 22 y las 5 h.",
       "n_zonas": 4
     }
